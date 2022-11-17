@@ -62,7 +62,7 @@ const sleep = ms => new Promise(res => setTimeout(res, ms));
 
 async function runLoop() {
     while (true) {
-        await run()
+        await run().catch(err => console.error(err))
         await sleep((config.PERIOD_SECONDS || 1) * 1000)
     }
 }
