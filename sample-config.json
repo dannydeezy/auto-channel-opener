@@ -1,0 +1,11 @@
+{
+    "PEER_PUBKEY": "024bfaf0cabe7f874fd33ebf7c6f4e5385971fc504ef3f492432e9e3ec77e1b5cf",
+    "MIN_CHANNEL_SIZE_SATS": 10000000,
+    "PERIOD_SECONDS": 30,
+    "ON_CHAIN_SATS_PER_VBYTE": 1,
+    "RESERVE_ON_CHAIN_SATS": 40000000,
+    "TLS_CERT_FILE": "/home/ubuntu/.lnd/tls.cert",
+    "MACAROON_FILE": "/home/ubuntu/.lnd/data/chain/bitcoin/mainnet/admin.macaroon",
+    "SOCKET": "localhost:10009",
+    "DRY_RUN": false
+}
