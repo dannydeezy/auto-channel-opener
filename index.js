@@ -2,10 +2,11 @@ const lnService = require('ln-service')
 const config = require('./config.json')
 const fs = require('fs')
 const axios = require('axios')
+const homedir = require('os').homedir();
 
 const { lnd } = lnService.authenticatedLndGrpc({
-    cert: (config.TLS_CERT_FILE && fs.readFileSync(config.TLS_CERT_FILE)) || fs.readFileSync('/home/ubuntu/.lnd/tls.cert'),
-    macaroon: (config.MACAROON_FILE && fs.readFileSync(config.MACAROON_FILE)) || fs.readFileSync(`/home/ubuntu/.lnd/data/chain/bitcoin/mainnet/admin.macaroon`),
+    cert: (config.TLS_CERT_FILE && fs.readFileSync(config.TLS_CERT_FILE)) || fs.readFileSync(`${homedir}/.lnd/tls.cert`),
+    macaroon: (config.MACAROON_FILE && fs.readFileSync(config.MACAROON_FILE)) || fs.readFileSync(`${homedir}/.lnd/data/chain/bitcoin/mainnet/admin.macaroon`),
     socket: config.SOCKET || `localhost:10009`,
 });
 
@@ -13,6 +14,7 @@ const FEE_API = `https://whatthefee.io/data.json`
 async function run() {
     // List unspents. If sum is greater than target channel size, open a channnel with the peer.
     const { utxos } = await lnService.getUtxos({ lnd, min_confirmations: config.MIN_CONFS })
+    console.log(utxos)
     const utxoSumSats = utxos.reduce((acc, utxo) => acc + utxo.tokens, 0)
     console.log(`Total sats unspent: ${utxoSumSats}`)
     if (utxoSumSats < config.MIN_CHANNEL_SIZE_SATS) {
