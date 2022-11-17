@@ -14,7 +14,6 @@ const FEE_API = `https://whatthefee.io/data.json`
 async function run() {
     // List unspents. If sum is greater than target channel size, open a channnel with the peer.
     const { utxos } = await lnService.getUtxos({ lnd, min_confirmations: config.MIN_CONFS })
-    console.log(utxos)
     const utxoSumSats = utxos.reduce((acc, utxo) => acc + utxo.tokens, 0)
     console.log(`Total sats unspent: ${utxoSumSats}`)
     if (utxoSumSats < config.MIN_CHANNEL_SIZE_SATS) {
