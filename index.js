@@ -13,13 +13,12 @@ const { lnd } = lnService.authenticatedLndGrpc({
 const FEE_API = `https://whatthefee.io/data.json`
 async function run() {
     // List unspents. If sum is greater than target channel size, open a channnel with the peer.
-    const { utxos } = await lnService.getUtxos({ lnd, min_confirmations: config.MIN_CONFS })
-    const utxoSumSats = utxos.reduce((acc, utxo) => acc + utxo.tokens, 0)
-    console.log(`Total sats unspent: ${utxoSumSats}`)
-    if (utxoSumSats < config.MIN_CHANNEL_SIZE_SATS) {
+    const chainBalance = (await lnService.getChainBalance({ lnd })).chain_balance;
+    console.log(`Total chain balance: ${chainBalance} sats`)
+    if (chainBalance < config.MIN_CHANNEL_SIZE_SATS) {
         return
     }
-    const potentialChannelSizeSats = utxoSumSats - (config.RESERVE_ON_CHAIN_SATS || 0)
+    const potentialChannelSizeSats = chainBalance - (config.RESERVE_ON_CHAIN_SATS || 0)
     if (potentialChannelSizeSats < config.MIN_CHANNEL_SIZE_SATS) {
         console.log(`potentialChannelSizeSats too small (${potentialChannelSizeSats} < ${config.MIN_CHANNEL_SIZE_SATS})`)
         return
@@ -44,7 +43,7 @@ async function run() {
             partner_public_key: config.PEER_PUBKEY,
             local_tokens: potentialChannelSizeSats,
             chain_fee_tokens_per_vbyte: feeRateSatsPerVbyte,
-            min_confirmations: config.MIN_CONFS
+            min_confirmations: 1
         }).catch(err => {
             console.error(err)
             return null

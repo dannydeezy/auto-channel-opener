@@ -7,6 +7,5 @@
     "TLS_CERT_FILE": "/home/ubuntu/.lnd/tls.cert",
     "MACAROON_FILE": "/home/ubuntu/.lnd/data/chain/bitcoin/mainnet/admin.macaroon",
     "SOCKET": "localhost:10009",
-    "MIN_CONFS": 1,
     "DRY_RUN": false
 }
